@@ -4,7 +4,7 @@ setlocale(LC_ALL, "lithuanian");
 const DB_HOST = "localhost";
 const DB_LOGIN = "root";
 const DB_PASSWORD = "";
-const DB_NAME = "knygos";
+const DB_NAME = "itexpert_new";
 
 $link = mysqli_connect(DB_HOST, DB_LOGIN, DB_PASSWORD, DB_NAME);
 mysqli_set_charset($link, "utf8");  
