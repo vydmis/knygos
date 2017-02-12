@@ -1,5 +1,23 @@
 <?php
 setlocale(LC_ALL, "lithuanian");
+
+const DB_HOST = "localhost";
+const DB_LOGIN = "root";
+const DB_PASSWORD = "";
+const DB_NAME = "knygos";
+
+$link = mysqli_connect(DB_HOST, DB_LOGIN, DB_PASSWORD, DB_NAME);
+mysqli_set_charset($link, "utf8");  
+
+function selectAllItems1(){
+    global $link;
+    $sql = "SELECT pavadinimas, metai, autorius, zanras FROM knygos WHERE pavadinimas !=''" ;
+    if(!$result = mysqli_query($link, $sql))
+        return false;
+    $items = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_free_result($result);
+    return $items;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -32,9 +50,14 @@ setlocale(LC_ALL, "lithuanian");
             <div class="row">
                 <div id="nav" class="col-md-12">
                     <!-- Navigacija -->
-                    <?php
-                    
-                    ?>
+                    <nav class="navbar navbar-inverse meniu">
+						<div class="container-fluid">
+							<ul class="nav navbar-nav">
+								<li class="active"><a href="index.php">Knygų sąrašas</a></li>
+								<li class="active"><a href="aprasas.php">Knygos aprašas</a></li>
+							</ul>
+						</div>
+					</nav>
                     <!-- Navigacija -->
                 </div>
             </div>
@@ -44,9 +67,37 @@ setlocale(LC_ALL, "lithuanian");
                 
                 <div id="content" class="col-md-12">
                     <!--  Contentas  -->
-                    <?php
-                        
-                    ?>	
+                    <div class="table-responsive">
+						<table border="1" cellpadding="5" cellspacing="0" width="100%" class="table table-bordered">
+							<tr class="success">
+								<th>Pavadinimas</th>
+								<th>Leidimo metai</th>
+								<th>Autorius (-iai)</th>
+								<th>Žanras</th>
+							</tr>
+						<?php
+							$goods = selectAllItems1();
+							if(!is_array($goods)){
+								echo 'Klaida: negalima isvest knygų sąrašaso';
+								exit;
+							}
+							if(!$goods){
+								echo 'Nėra knygų';
+								exit;
+							}
+							foreach($goods as $item){
+						?>
+							<tr class="active">
+								<td><a href="aprasas.php?pav=<?=$item['pavadinimas']?>"><?=$item['pavadinimas']?></a></td>
+								<td><?=$item['metai']?></td> 
+								<td><?=$item['autorius']?></td>
+								<td><?=$item['zanras']?></td>
+							</tr>
+						<?php
+							}
+						?>
+						</table>
+					</div>
                     <!-- Contentas -->
                 </div>
             </div>
